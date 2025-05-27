@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPlainTextEdit>
@@ -24,36 +25,46 @@ class Ui_Widget
 public:
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
-    QPlainTextEdit *plainTextEdit;
-    QLineEdit *lineEdit;
-    QPushButton *sendBtn;
+    QPlainTextEdit *ptLog;
+    QLineEdit *lePort;
+    QPushButton *openBtn;
+    QCheckBox *chEcho;
+    QCheckBox *chBroadcast;
 
     void setupUi(QWidget *Widget)
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName("Widget");
-        Widget->resize(800, 600);
+        Widget->resize(835, 591);
         gridLayoutWidget = new QWidget(Widget);
         gridLayoutWidget->setObjectName("gridLayoutWidget");
         gridLayoutWidget->setGeometry(QRect(50, 20, 671, 501));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName("gridLayout");
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        plainTextEdit = new QPlainTextEdit(gridLayoutWidget);
-        plainTextEdit->setObjectName("plainTextEdit");
+        ptLog = new QPlainTextEdit(gridLayoutWidget);
+        ptLog->setObjectName("ptLog");
+        ptLog->setReadOnly(true);
 
-        gridLayout->addWidget(plainTextEdit, 0, 0, 1, 1);
+        gridLayout->addWidget(ptLog, 0, 0, 1, 1);
 
-        lineEdit = new QLineEdit(gridLayoutWidget);
-        lineEdit->setObjectName("lineEdit");
+        lePort = new QLineEdit(gridLayoutWidget);
+        lePort->setObjectName("lePort");
 
-        gridLayout->addWidget(lineEdit, 3, 0, 1, 1);
+        gridLayout->addWidget(lePort, 3, 0, 1, 1);
 
-        sendBtn = new QPushButton(gridLayoutWidget);
-        sendBtn->setObjectName("sendBtn");
+        openBtn = new QPushButton(gridLayoutWidget);
+        openBtn->setObjectName("openBtn");
 
-        gridLayout->addWidget(sendBtn, 4, 0, 1, 1);
+        gridLayout->addWidget(openBtn, 4, 0, 1, 1);
 
+        chEcho = new QCheckBox(Widget);
+        chEcho->setObjectName("chEcho");
+        chEcho->setGeometry(QRect(730, 30, 92, 24));
+        chEcho->setCheckable(true);
+        chBroadcast = new QCheckBox(Widget);
+        chBroadcast->setObjectName("chBroadcast");
+        chBroadcast->setGeometry(QRect(730, 60, 92, 24));
 
         retranslateUi(Widget);
 
@@ -63,9 +74,11 @@ public:
     void retranslateUi(QWidget *Widget)
     {
         Widget->setWindowTitle(QCoreApplication::translate("Widget", "Widget", nullptr));
-        plainTextEdit->setPlainText(QCoreApplication::translate("Widget", "user : test output", nullptr));
-        lineEdit->setText(QCoreApplication::translate("Widget", "test input", nullptr));
-        sendBtn->setText(QCoreApplication::translate("Widget", "Send", nullptr));
+        ptLog->setPlainText(QString());
+        lePort->setText(QString());
+        openBtn->setText(QCoreApplication::translate("Widget", "Server Open", nullptr));
+        chEcho->setText(QCoreApplication::translate("Widget", "Echo", nullptr));
+        chBroadcast->setText(QCoreApplication::translate("Widget", "Broadcast", nullptr));
     } // retranslateUi
 
 };

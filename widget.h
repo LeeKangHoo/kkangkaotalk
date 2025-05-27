@@ -22,13 +22,15 @@ class Widget : public QWidget
     Q_OBJECT
 
 signals:
-    void appendMessage(Qtring& msg);
+    void appendMessage(QString msg);
+
 
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
 private slots:
+    void handleMessage(QString msg);
 
     void on_ptLog_blockCountChanged(int newBlockCount);
 
@@ -41,6 +43,14 @@ private slots:
     void on_chBroadcast_checkStateChanged(const Qt::CheckState &arg1);
 
 private:
+    void serverThread();
+    void recvThread(int socket_accept, char* client_name, uint32_t client_ip);
+
     Ui::Widget *ui;
+    std::map<uint32_t, std::string> client;
+    std::set<int> sockets;
+    bool echo = false;
+    bool broadcast = false;
+    uint16_t port = 0;
 };
 #endif // WIDGET_H

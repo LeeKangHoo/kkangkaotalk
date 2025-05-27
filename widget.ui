@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>835</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,27 +24,59 @@
    </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QPlainTextEdit" name="plainTextEdit">
+     <widget class="QPlainTextEdit" name="ptLog">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
       <property name="plainText">
-       <string>user : test output</string>
+       <string/>
       </property>
      </widget>
     </item>
     <item row="3" column="0">
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="lePort">
       <property name="text">
-       <string>test input</string>
+       <string/>
       </property>
      </widget>
     </item>
     <item row="4" column="0">
-     <widget class="QPushButton" name="sendBtn">
+     <widget class="QPushButton" name="openBtn">
       <property name="text">
-       <string>Send</string>
+       <string>Server Open</string>
       </property>
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QCheckBox" name="chEcho">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>30</y>
+     <width>92</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Echo</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="chBroadcast">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>60</y>
+     <width>92</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Broadcast</string>
+   </property>
   </widget>
  </widget>
  <resources/>

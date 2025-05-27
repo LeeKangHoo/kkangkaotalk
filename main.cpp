@@ -2,7 +2,7 @@
 
 #include <QApplication>
 
-
+/*
 std::map<uint32_t,std::string> client;
 std::set<int> sockets;
 
@@ -106,7 +106,7 @@ void serverThread(){
         t->detach();
     }
     close(socket_);
-}
+}*/
 
 int main(int argc, char *argv[])
 {
@@ -114,9 +114,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Widget w;
     w.show();
-
+/*
     std::thread server(serverThread);
     server.detach();
-
+*/
     return a.exec();
 }
