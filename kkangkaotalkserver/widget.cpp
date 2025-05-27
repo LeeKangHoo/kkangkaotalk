@@ -49,28 +49,37 @@ void Widget::serverThread(){
             continue;
         }
 
-        if (client.find(addr.sin_addr.s_addr) == client.end()){
+        if (client.find(socket_accept) == client.end()){
+            emit appendMessage(QString("New connection: %1").arg(socket_accept));
             char tmp_buf[65536];
-            recv(socket_accept, tmp_buf, 65536 - 1, 0);
-            client.insert({addr.sin_addr.s_addr,tmp_buf});
-            sockets.insert(socket_accept);
-            std::thread* t = new std::thread(&Widget::recvThread,this, socket_accept,tmp_buf,addr.sin_addr.s_addr);
+            memset(tmp_buf,0,sizeof(tmp_buf));
+            ssize_t recv_len = recv(socket_accept, tmp_buf, 65536 - 1, 0);
+            if (recv_len > 0) {
+                tmp_buf[recv_len] = '\0';
+            }
+
+            client.insert({socket_accept,tmp_buf});
+            //sockets.insert(socket_accept);
+            std::thread* t = new std::thread(&Widget::recvThread,this, socket_accept,tmp_buf);
             t->detach();
             continue;
         }
+        emit appendMessage(QString("Existing connection?: %1").arg(socket_accept));
 
-        char tmp_buf[65536];
+        /*char tmp_buf[65536];
         recv(socket_accept, tmp_buf, 65536 - 1, 0);
-        sockets.insert(socket_accept);
-        std::thread* t = new std::thread(&Widget::recvThread,this, socket_accept,tmp_buf,addr.sin_addr.s_addr);
+        char* client_name = client.find(socket_accept)->second;*/
+
+        std::thread* t = new std::thread(&Widget::recvThread,this, socket_accept,client.find(socket_accept)->second.c_str());
         t->detach();
     }
 
     ::close(socket_);
 }
 
-void Widget::recvThread(int socket_accept,char* client_name,uint32_t client_ip){
+void Widget::recvThread(int socket_accept,const char* client_name){
     emit appendMessage(QString("%1 Connected").arg(client_name));
+    emit appendMessage(QString("Socket: %1, Name: %2").arg(socket_accept).arg(client_name));
     char buf[65536];
     char msg[65536];
     while (true){
@@ -81,22 +90,23 @@ void Widget::recvThread(int socket_accept,char* client_name,uint32_t client_ip){
             break;
         }
         buf[res] = '\0';
+        emit appendMessage(QString("%1 : %2").arg(client.find(socket_accept)->second).arg(buf));
 
         if (echo){
             std::string msg_e =  std::string("Me : ") + buf;
             send(socket_accept,msg_e.c_str(),msg_e.length(),0);
         }
         if (broadcast){
-            std::string msg_b = std::string(client_name) + " : " + buf;
-            for(int i : sockets){
-                if(i != socket_accept){
-                    send(i,msg_b.c_str(),msg_b.length(),0);
+            std::string msg_b = std::string(client.find(socket_accept)->second) + " : " + buf;
+            for( std::pair<const int,std::string> i : client){
+                if(i.first != socket_accept){
+                    send(i.first,msg_b.c_str(),msg_b.length(),0);
                 }
             }
         }
     }
-    client.erase(client_ip);
-    sockets.erase(socket_accept);
+    client.erase(socket_accept);
+    //sockets.erase(socket_accept);
 
     emit appendMessage(QString("%1 Disconnected").arg(client_name));
     ::close(socket_accept);
